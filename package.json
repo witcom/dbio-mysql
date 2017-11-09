@@ -24,7 +24,8 @@
   "homepage": "https://github.com/witcom/dbio-mysql#readme",
   "dependencies": {
     "lodash": "^4.17.4",
-    "mysql": "^2.15.0"
+    "mysql": "^2.15.0",
+    "sqlstring": "^2.3.0"
   },
   "devDependencies": {
     "chai": "^4.1.2",

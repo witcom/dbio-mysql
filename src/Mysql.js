@@ -6,13 +6,23 @@
  * @description:
  **************************************************/
 
+const EngineContext = require('./dbio').EngineContext;
+const MysqlDriver = require('./MysqlDriver');
+
+
 class Mysql {
     constructor( options ){
 
+        const context = new EngineContext( options );
+
+        const driver = new MysqlDriver( options );
+        context.setDriver(driver);
+
+        this._context = context;
     }
 
     on(event_name, callback){
-
+        this._context.on(event_name, callback);
     }
 
     begin(){
@@ -43,8 +53,6 @@ class Mysql {
 
     }
 }
-
-Mysql.Events = require('./events');
 
 
 module.exports = Mysql;

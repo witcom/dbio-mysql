@@ -1,0 +1,98 @@
+/*************************************************
+ * @copyright 2017 Flision Corporation Inc.
+ * @author: Vincent Chan @ Canton
+ * @date: 2017年11月09日
+ * @version: 1.0.0
+ * @description:
+ **************************************************/
+
+const assert = require( 'chai' ).assert;
+const Mysql = require( '../index' );
+
+suite( 'CURD', function () {
+
+    let mysql;
+
+    setup( function () {
+        mysql = new Mysql( {
+            host: 'rm-wz9n74bo1negwkz5lo.mysql.rds.aliyuncs.com',
+            username: 'test',
+            password: 'flision',
+            database: 'test'
+        } );
+    } );
+
+    suite( 'query', function () {
+        test('显式指定字段 数组',async function () {
+           const rows = await mysql.table('t_test1')
+               .select(['id','name','date_time','timestamp','blob']);
+
+        });
+
+        test('显式指定字段 对象',async function () {
+
+            const field_obj = {
+                id:undefined,
+                name:undefined,
+                date_time:undefined,
+                timestamp: undefined,
+                blob: undefined
+            };
+
+            const rows = await mysql.table('t_test1')
+                .select(field_obj);
+
+        });
+
+        test('#count',async function () {
+            const count = await mysql.table('t_test1')
+                .count()
+                .select();
+
+        })
+
+        test( '#where by ?', async function () {
+            const rows = await mysql.table( 't_test1' )
+                .where( 'id = ?', [ 1 ] )
+                .select();
+            assert.equal(rows[0].id,1);
+        } );
+
+        test( '#where by key', async function () {
+            const rows = await mysql.table('t_test1')
+                .where('id=:id',{id:1})
+                .select();
+
+            assert.equal(rows[0].id,1);
+        } );
+
+        test('#page',async function () {
+            const rows = await mysql.table('t_test1')
+                .orderBy('id',Mysql.Order.Desc)
+                .page(1,10)
+                .select();
+        })
+
+    } );
+
+    suite( 'insert', function () {
+        test( '#insert', async function () {
+            const insert_id = await mysql.table( 't_test1' )
+                .values( { name: 'test', time: new Date() } )
+                .insert();
+
+            assert.notEqual( insert_id, 0 );
+        } )
+    } );
+
+    suite( 'update', function () {
+        test( '#update', async function () {
+            const affect_rows = await mysql.table( 't_test1' )
+                .values( { name: 'test1', time: new Date() } )
+                .where( "id=?", [ 1 ] )
+                .update();
+
+            assert.notEqual( affect_rows, 0 );
+        } )
+    } )
+} );

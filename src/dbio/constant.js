@@ -6,7 +6,12 @@
  * @description:
  **************************************************/
 
-module.exports = {
+exports.Events = {
     ERROR: 'error',
     SQL:'sql'
+};
+
+exports.OrderDescend = {
+    Asc:'asc',
+    Desc: 'desc'
 };
