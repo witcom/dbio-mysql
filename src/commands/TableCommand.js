@@ -16,18 +16,23 @@ class TableCommand extends QueryCommand {
 
     insert( values ){
         let sql = this._builder.buildInsert( values );
-        return this._execute(sql);
+        return this.execute(sql);
     }
 
     update( values ){
         let sql = this._builder.buildUpdate( values );
-        return this._execute(sql);
+        return this.execute(sql);
     }
 
     delete( ){
         let sql = this._builder.buildDelete( );
-        return this._execute(sql);
+        return this.execute(sql);
     }
+
+    // clone(){
+    //     let newBuilder = this._builder.clone();
+    //     return new TableCommand(newBuilder,this._executor);
+    // }
 }
 
 module.exports = TableCommand;

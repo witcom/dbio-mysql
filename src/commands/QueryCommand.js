@@ -6,10 +6,12 @@
  * @description:
  **************************************************/
 
+const _ = require('lodash');
+
 class QueryCommand {
     constructor( commandBuilder, executor ){
         this._builder = commandBuilder;
-        this._execute = executor.execute;
+        this._executor = executor;
     }
 
     where( condition, values ){
@@ -36,18 +38,24 @@ class QueryCommand {
     }
 
     page( page, take ){
-        this._builder.setPage(page,take);
+        this._builder.setPaged(page,take);
         return this;
     }
 
     select( fields ){
         let sql = this._builder.buildSelect( fields );
-        return this._execute(sql);
+        return this.execute(sql);
+    }
+
+    execute(sql){
+        return this._executor.execute(sql);
     }
 
     clone(){
-        let newBuilder = this._builder.clone();
-        return new this(newBuilder,this._execute);
+        let newObj = _.clone(this);
+        newObj._builder = this._builder.clone();
+        return newObj;
+        //return new QueryCommand(newBuilder,this._executor);
     }
 }
 

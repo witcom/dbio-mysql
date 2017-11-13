@@ -22,6 +22,7 @@ function keyedFormat( query, values,escape ) {
 class MysqlCommandBuilder {
     constructor( tableName, options = {} ) {
 
+        this._options = options;
         this._forceDelete = options.forceDelete || false;
         this._forceUpdate = options.forceUpdate || false;
 

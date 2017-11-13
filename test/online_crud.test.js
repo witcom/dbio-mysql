@@ -38,7 +38,8 @@ function unzip( bin ) {
 }
 
 const config = {
-    host:'127.0.0.1',
+    //host:'127.0.0.1',
+    host:'rm-wz9n74bo1negwkz5lo.mysql.rds.aliyuncs.com',
     user:'test',
     password:'flision',
     database:'test',
@@ -77,6 +78,23 @@ describe('online_curd',function () {
     });
 
     describe('normal',function (  ) {
+        it('paged',async function (  ) {
+           try{
+               let total_sql = await mysql.table('t_test1');
+               let item_sql = total_sql.clone();
+
+               total_sql.counted(true);
+               item_sql.page(1,10);
+
+               let total_result = await total_sql.select();
+               let item_result = await item_sql.select();
+
+               assert.isNotNaN(total_result.rows[0]);
+               assert.isAtLeast(item_result.rows.length,1);
+           }catch (err){
+               console.log(err);
+           }
+        });
         it('查询应该返回空',async function (  ) {
             try{
                 let result = await mysql.table('t_test1')
