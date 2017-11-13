@@ -159,9 +159,9 @@ class MysqlCommandBuilder {
 
         if ( this._counted ) {
             if ( fields instanceof Array ) {
-                fields = `COUNT(\`${fields[ 0 ]}\`)`;
+                fields = `COUNT(\`${fields[ 0 ]}\`) as count`;
             } else {
-                fields = `COUNT(*)`;
+                fields = `COUNT(*) as count`;
             }
         }
 

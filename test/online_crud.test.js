@@ -39,6 +39,7 @@ function unzip( bin ) {
 
 const config = {
     host:'127.0.0.1',
+
     user:'test',
     password:'flision',
     database:'test',
@@ -88,7 +89,7 @@ describe('online_curd',function () {
                let total_result = await total_sql.select();
                let item_result = await item_sql.select();
 
-               assert.isNotNaN(total_result.rows[0]);
+               assert.isNotNaN(total_result.rows[0].count);
                assert.isAtLeast(item_result.rows.length,1);
            }catch (err){
                console.log(err);
