@@ -44,6 +44,11 @@ class QueryCommand {
         let sql = this._builder.buildSelect( fields );
         return this._execute(sql);
     }
+
+    clone(){
+        let newBuilder = this._builder.clone();
+        return new this(newBuilder,this._execute);
+    }
 }
 
 module.exports = QueryCommand;
