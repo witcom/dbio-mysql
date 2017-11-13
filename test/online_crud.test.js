@@ -38,8 +38,8 @@ function unzip( bin ) {
 }
 
 const config = {
-    //host:'127.0.0.1',
-    host:'rm-wz9n74bo1negwkz5lo.mysql.rds.aliyuncs.com',
+    host:'127.0.0.1',
+
     user:'test',
     password:'flision',
     database:'test',
