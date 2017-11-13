@@ -7,15 +7,11 @@
  **************************************************/
 
 const mysql = require( 'mysql' );
-const events = require( './events' );
+const MysqlQueryResult = require('./MysqlQueryResult');
 
-
-exports.create_connection = function ( config, event_bus ) {
+exports.create_connection = function ( config ) {
     return new Promise( ( resolve, reject ) => {
         const conn = mysql.createConnection( config );
-        conn.on( 'error', ( err ) => {
-            event_bus.emit( events.ERROR, err );
-        } );
         conn.connect( ( err ) => {
             if ( err ) {
                 reject( err )
@@ -27,15 +23,12 @@ exports.create_connection = function ( config, event_bus ) {
     } );
 }
 
-exports.create_pool = function ( config, event_bus ) {
+exports.create_pool = function ( config ) {
     const pool = mysql.createPool( config );
-    pool.on( 'error', ( err ) => {
-        event_bus.emit( events.ERROR, err );
-    } );
-    return Promise.resolve( pool );
+    return pool;
 }
 
-exports.create_connection_pool = function ( pool ) {
+exports.create_pool_connection = function ( pool ) {
     return new Promise( ( resolve, reject ) => {
         pool.getConnection( ( err, conn ) => {
             if ( err ) {
@@ -77,17 +70,18 @@ exports.ping = function ( conn ) {
 function customCast( field, next ) {
 
     //日期时间直接返回字符串
-    if( field.type === 'TIMESTAMP' ||
+    if ( field.type === 'TIMESTAMP' ||
         field.type === 'DATE' ||
-        field.type === 'DATETIME'){
+        field.type === 'DATETIME' ) {
         return field.string();
     }
     return next();
 }
 
-exports.query = function ( conn, sql, values ={}, options={} ) {
-    let log_sql = options.log_sql || false;
-    let logger = options.logger;
+
+
+exports.query = function ( conn, sql, values = {}, options = {} ) {
+
     let query_options = {
         sql,
         typeCast: customCast,
@@ -96,21 +90,12 @@ exports.query = function ( conn, sql, values ={}, options={} ) {
     return new Promise( ( resolve, reject ) => {
         const query = conn.query( query_options, values, ( err, result, fields ) => {
             if ( err ) {
-                reject( err );
+                reject( { sql: query.sql, err } );
             }
             else {
-                resolve( {
-                    rows: result,
-                    fields,
-                    changed_rows: result.changedRows,
-                    affected_rows: result.affectedRows,
-                    insert_id: result.insertId
-                } );
+                resolve( new MysqlQueryResult(query.sql,result,fields) );
             }
         } );
-        if ( log_sql && typeof logger === 'function' ) {
-            logger( query.sql );
-        }
     } );
 };
 

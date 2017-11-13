@@ -19,8 +19,8 @@ function keyedFormat( query, values,escape ) {
     });
 }
 
-class CommandBuilder {
-    constructor( tableName, options ) {
+class MysqlCommandBuilder {
+    constructor( tableName, options = {} ) {
 
         this._forceDelete = options.forceDelete || false;
         this._forceUpdate = options.forceUpdate || false;
@@ -149,7 +149,9 @@ class CommandBuilder {
         if ( fields instanceof Array ) {
             fields = escape( fields );
         } else if ( typeof fields === 'object' ) {
-            fields = escape( fields );
+            fields = escape(_.keys(fields));
+        } else if ( typeof fields === 'string') {
+
         } else {
             fields = '*'
         }
@@ -248,4 +250,4 @@ class CommandBuilder {
     }
 }
 
-module.exports = CommandBuilder;
+module.exports = MysqlCommandBuilder;

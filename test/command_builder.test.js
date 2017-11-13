@@ -8,7 +8,7 @@
 
 const assert = require('chai').assert;
 const sqlstring = require( 'sqlstring' );
-const CommandBuilder = require( '../src/commands/CommandBuilder' );
+const CommandBuilder = require( '../src/MysqlCommandBuilder' );
 const zlib = require( 'zlib' );
 
 function zip( obj ) {
@@ -77,19 +77,24 @@ suite( 'CommandBuilder', function () {
 
     test( '#buildSelect by obj', function () {
         const builder = new CommandBuilder( 't_test1', driver );
-        let obj = {
-            id: 1,
-            name: 'vincent',
-            time,
-            bin
-        };
-        builder.setWhere( 'id=:id and name=:name and binary=:bin', obj );
-        builder.setAlias('t1');
-        builder.setOrderBy('`id` desc');
-        let sql = builder.buildSelect();
+        let sql = builder.buildSelect({id:undefined,name:undefined});
 
         console.log( sql );
-    } )
+    } );
+
+    test( '#buildSelect by array', function () {
+        const builder = new CommandBuilder( 't_test1', driver );
+        let sql = builder.buildSelect(['id','name']);
+
+        console.log( sql );
+    } );
+
+    test( '#buildSelect by string', function () {
+        const builder = new CommandBuilder( 't_test1', driver );
+        let sql = builder.buildSelect('id,name');
+
+        console.log( sql );
+    } );
 
     test('#buildSelect paged',function () {
         const builder = new CommandBuilder( 't_test1', driver );

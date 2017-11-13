@@ -6,9 +6,15 @@
  * @description:
  **************************************************/
 
+const {Events} = require("./constant");
+
 class DbDriver {
     constructor(){
 
+    }
+
+    get Events(){
+        return Events;
     }
 
     getConnection(){

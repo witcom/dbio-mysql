@@ -7,30 +7,42 @@
  **************************************************/
 
 class QueryCommand {
-    constructor( context, builder ){
-        this._builder = builder;
-        this._execute = context.execute;
+    constructor( commandBuilder, executor ){
+        this._builder = commandBuilder;
+        this._execute = executor.execute;
     }
 
     where( condition, values ){
         this._builder.setWhere(condition, values);
+        return this;
     }
 
     orderBy( values ){
         this._builder.setOrderBy( values );
+        return this;
     }
 
-    groupBy(){}
+    groupBy(){
+        return this;
+    }
 
-    having(){}
+    having(){
+        return this;
+    }
+
+    counted( enable ){
+        this._builder.setCounted(enable);
+        return this;
+    }
 
     page( page, take ){
         this._builder.setPage(page,take);
+        return this;
     }
 
     select( fields ){
         let sql = this._builder.buildSelect( fields );
-        this._execute(sql);
+        return this._execute(sql);
     }
 }
 

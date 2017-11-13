@@ -6,27 +6,27 @@
  * @description:
  **************************************************/
 
-
+const QueryCommand = require('./QueryCommand');
 
 class TableCommand extends QueryCommand {
-    constructor( context, builder ){
-        super(context, builder);
+    constructor( commandBuilder, executor ){
+        super(commandBuilder, executor);
 
     }
 
     insert( values ){
         let sql = this._builder.buildInsert( values );
-        this._execute(sql);
+        return this._execute(sql);
     }
 
     update( values ){
         let sql = this._builder.buildUpdate( values );
-        this._execute(sql);
+        return this._execute(sql);
     }
 
     delete( ){
         let sql = this._builder.buildDelete( );
-        this._execute(sql);
+        return this._execute(sql);
     }
 }
 

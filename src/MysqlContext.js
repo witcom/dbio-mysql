@@ -6,12 +6,27 @@
  * @description:
  **************************************************/
 
-const EventEmitter = require('events')
+const EventEmitter = require('events');
+
+const {Events} = require('./constant');
 
 class MysqlContext extends EventEmitter {
-    constructor(){
+    constructor(options){
         super();
 
+        this._logSQL = options.logSQL || false;
+    }
 
+    get Events(){
+        return Events;
+    }
+
+    get IsLogSQL(){
+        return this._logSQL;
     }
 }
+
+
+
+module.exports = MysqlContext;
+
