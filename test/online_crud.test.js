@@ -39,7 +39,6 @@ function unzip( bin ) {
 
 const config = {
     host:'127.0.0.1',
-
     user:'test',
     password:'flision',
     database:'test',
