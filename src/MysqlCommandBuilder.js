@@ -148,9 +148,11 @@ class MysqlCommandBuilder {
         const escape = SqlFormat.escape;
 
         if ( fields instanceof Array ) {
-            fields = escape( fields );
+            fields = _.join(fields.map((v)=>{
+                return `\`${v}\``
+            }),',');
         } else if ( typeof fields === 'object' ) {
-            fields = escape(_.keys(fields));
+            fields = _.join(_.keys(fields).map((v)=>{ return `\`${v}\``}));
         } else if ( typeof fields === 'string') {
 
         } else {

@@ -78,6 +78,16 @@ describe('online_curd',function () {
     });
 
     describe('normal',function (  ) {
+        it('select by array',async function () {
+            let result = await mysql.table('t_test1').select(['id','name']);
+
+        });
+
+        it('select by obj',async function () {
+            let result = await mysql.table('t_test1').select({id:undefined,name:undefined});
+
+        });
+
         it('paged',async function (  ) {
            try{
                let total_sql = await mysql.table('t_test1');
@@ -233,7 +243,7 @@ describe('online_curd',function () {
 
         it('提交后保持连接打开',async function () {
             let session = await mysql.begin({keepOpen:true});
-            console.log(session);
+            //console.log(session);
             let result = await session.table('t_test1')
                 .insert({name:'text_tx_insert'});
 
