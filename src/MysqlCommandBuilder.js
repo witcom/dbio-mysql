@@ -41,6 +41,9 @@ class MysqlCommandBuilder {
         this._groupBy = false;
         this._groupFields = 'id';
 
+        this._join = false;
+        this._joinCause = '';
+
         this._having = false;
         this._havingCause = '';
         this._havingArgs = {};
@@ -104,6 +107,15 @@ class MysqlCommandBuilder {
         return this;
     }
 
+    setJoin( str ){
+        if(str === '' || str === undefined){
+            this._join = false
+        }else{
+            this._join = true;
+            this._joinCause = str;
+        }
+    }
+
     setWhere( condition, ...args ) {
         if ( _.isUndefined( condition ) ) {
             this._where = false;
@@ -148,9 +160,10 @@ class MysqlCommandBuilder {
         const escape = SqlFormat.escape;
 
         if ( fields instanceof Array ) {
-            fields = _.join(fields.map((v)=>{
-                return `\`${v}\``
-            }),',');
+            // fields = _.join(fields.map((v)=>{
+            //     return `${v}`
+            // }),',');
+            fields = _.join(fields,',');
         } else if ( typeof fields === 'object' ) {
             fields = _.join(_.keys(fields).map((v)=>{ return `\`${v}\``}));
         } else if ( typeof fields === 'string') {
@@ -171,6 +184,10 @@ class MysqlCommandBuilder {
 
         if(this._alias){
             sql = sql + `${this._aliasName} `;
+        }
+
+        if(this._join){
+            sql += `${this._joinCause} `;
         }
 
         if ( this._where ) {

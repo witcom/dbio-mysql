@@ -37,6 +37,11 @@ class QueryCommand {
         return this;
     }
 
+    join( value ){
+        this._builder.setJoin( value );
+        return this;
+    }
+
     counted( enable ){
         this._builder.setCounted(enable);
         return this;
