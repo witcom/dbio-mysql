@@ -1,6 +1,6 @@
 {
   "name": "dbio-mysql",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "db.io mysql driver",
   "main": "index.js",
   "scripts": {

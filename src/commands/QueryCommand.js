@@ -19,6 +19,11 @@ class QueryCommand {
         return this;
     }
 
+    alias( name ){
+        this._builder.setAlias(name);
+        return this;
+    }
+
     orderBy( values ){
         this._builder.setOrderBy( values );
         return this;
